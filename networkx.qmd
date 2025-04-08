@@ -1,0 +1,902 @@
+---
+title: Network Analysis with NetworkX
+format: live-html
+pyodide:
+  packages:
+    - matplotlib
+    - networkx
+---
+
+# Network Analysis with NetworkX Interactive Code Learning
+
+## NetworkX
+
+NetworkX is a Python package for the creation, manipulation, 
+and study of the structure, dynamics, and functions of 
+complex networks [Ref001]
+
+.. [Ref001] https://networkx.org
+
+## Installation
+
+### using pip
+
+```{bash}
+pip install networkx
+```
+
+### using anaconda
+
+```{bash}
+conda install networkx
+```
+
+## Load networkx library
+
+```{pyodide}
+#| edit: false
+import networkx as nx
+```
+
+## Creating a graph
+
+```{pyodide}
+G = nx.Graph()
+```
+
+In this line, nx is a common alias for the networkx library, which is a powerful Python library used for creating, analyzing, and manipulating complex networks or graphs. The Graph() method is a constructor provided by networkx to create an **undirected graph**. An undirected graph is a type of graph where the edges between nodes have no direction, meaning the connection between two nodes is bidirectional.
+
+The variable G is assigned the newly created graph object. This graph starts empty, meaning it has no nodes or edges. You can later add nodes (representing entities) and edges (representing relationships between entities) to this graph using various methods provided by the networkx library, such as add_node(), add_edge(), or by importing data from external sources.
+
+## Add a node/nodes
+
+add one node at a time 
+
+```{pyodide}
+G.add_node(1)
+```
+
+`G` is an instance of a NetworkX graph, such as nx.Graph(), nx.DiGraph(), etc.
+`add_node(1)` This method adds a node labeled 1 to the graph. If the node 1 already exists in the graph, the method does nothing (it won't create duplicates).
+
+to view `G` just type `G` and run
+
+```{pyodide}
+
+```
+
+please try add node that has label "A" to the graph `G`
+
+```{pyodide}
+G.add...
+```
+
+to view nodes please type `G.nodes()` and run. You might see `NodeView((1, 'A'))` as a result.
+
+```{pyodide}
+G.
+```
+
+An nbunch is any iterable container of nodes that 
+is not itself a node in the graph. (e.g. a list, 
+set, graph, file, etc..)
+
+add a list of nodes
+
+```{pyodide}
+G.add_nodes_from([2,3])
+```
+
+This adds multiple nodes to a graph object G in one operation using the add_nodes_from() method provided by the networkx library.
+
+Here, G is an instance of a networkx graph, such as one created using nx.Graph() or nx.DiGraph(). The method add_nodes_from() allows you to add multiple nodes to the graph at once by passing an iterable (e.g., a list, set, or other collection) of node labels. In this case, the list [2, 3] is passed as an argument, which means that two nodes labeled 2 and 3 will be added to the graph G.
+
+If the nodes 2 and 3 already exist in the graph, the method will quietly ignore them, as networkx does not allow duplicate nodes. This behavior ensures that the graph remains consistent without raising errors for repeated additions.
+
+This method is particularly useful when you need to add a batch of nodes to a graph, as it is more concise and efficient than adding each node individually using the add_node() method. After this operation, the graph G will contain the nodes 2 and 3 (if they were not already present).
+
+add nodes from another graph
+
+Create a graph
+
+```{pyodide}
+H = nx.path_graph(10)
+```
+
+This line of code creates a graph object H using the path_graph() function from the networkx library. Here's a detailed explanation:
+
+The path_graph() function is a utility provided by networkx to generate a specific type of graph called a path graph. A path graph is a simple graph where nodes are arranged in a linear sequence, and each node (except the first and last) is connected to exactly two neighbors.
+
+The argument 10 passed to the function specifies the number of nodes in the path graph. As a result, this code creates a path graph with 10 nodes, labeled from 0 to 9. The nodes are connected sequentially, forming a chain-like structure: 0-1-2-3-...-9.
+
+The resulting graph object H is stored in memory and can be further analyzed or manipulated. For example, you can add more nodes or edges, visualize the graph, or compute properties such as its diameter or shortest paths. This function is particularly useful when you need to work with structured graphs for testing or modeling purposes.
+
+See the nodes from `H`
+
+```{pyodide}
+H.no...
+```
+
+Add node from `H`
+
+```{pyodide}
+G.add_nodes_from(H)
+```
+
+See the nodes from `G`
+
+```{pyodide}
+G.no...
+```
+
+Note that G now contains the nodes of H as nodes of G. 
+In contrast, you could use the graph H as a node in G.
+
+```{pyodide}
+G.add_node(H)
+````
+
+See the nodes from `G` again
+
+```{pyodide}
+G.no...
+```
+
+## Add an edge/edges
+
+Adding an edge
+
+```{pyodide}
+G.add_edge(1,2)
+e = (2,3)
+G.add_edge(*e) # unpack edge tuple*
+```
+
+
+**Adding an Edge Directly**: The first line, `G.add_edge(1,2)`, adds an edge between the nodes 1 and 2 in the graph G. If the nodes 1 and 2 do not already exist in the graph, they will be automatically added before the edge is created. This is a convenient feature of networkx that simplifies graph construction.
+
+**Using a Tuple to Represent an Edge**: The second line, `e = (2,3)`, defines a tuple e that represents an edge between the nodes 2 and 3. Tuples are a common way to represent edges in graph-related operations because they naturally pair two nodes together.
+
+**Unpacking a Tuple to Add an Edge**: The third line, `G.add_edge(*e)`, uses Python's unpacking operator (*) to pass the elements of the tuple e as separate arguments to the add_edge() method. This is equivalent to calling `G.add_edge(2,3)` directly. The unpacking operator is particularly useful when the edge information is stored in a data structure like a tuple or list, as it allows you to dynamically add edges without explicitly specifying the nodes.
+
+By the end of this code snippet, the graph G will have two edges: one connecting nodes 1 and 2, and another connecting nodes 2 and 3. This approach demonstrates both direct and dynamic ways of adding edges, making it flexible for different use cases, such as when edge data is read from an external source or generated programmatically.
+
+by adding a list of edges,
+
+```{pyodide}
+G.add_edges_from([(1,2),(1,3)])
+```
+
+add multiple edges to a graph object G in the networkx library using the `add_edges_from()` method. Here's a detailed explanation:
+
+The `add_edges_from()` method allows you to add multiple edges to a graph in a single operation by passing an iterable (e.g., a list or set) of edge tuples. Each tuple represents an edge, where the two elements in the tuple are the nodes connected by that edge. In this case, the list [(1, 2), (1, 3)] is passed as an argument, which specifies two edges: one connecting nodes 1 and 2, and another connecting nodes 1 and 3.
+
+If any of the nodes mentioned in the edge tuples do not already exist in the graph, networkx will automatically add them before creating the edges. This feature simplifies graph construction by eliminating the need to explicitly add nodes beforehand.
+
+After this operation, the graph G will contain the edges (1, 2) and (1, 3). Additionally, the nodes 1, 2, and 3 will be present in the graph if they were not already added. This method is particularly useful when you need to add a batch of edges, such as when importing data from an external source or constructing a graph programmatically. It is both concise and efficient compared to adding each edge individually using the add_edge() method.
+
+An ebunch is any iterable container of edge-tuples. 
+An edge-tuple can be a 2-tuple of nodes or a 3-tuple 
+with 2 nodes followed by an edge attribute dictionary, 
+e.g. (2,3,{‘weight':3.1415}). Edge attributes are 
+discussed further below
+
+```{pyodide}
+H = nx.path_graph(10)
+G.add_edges_from(H.edges())
+```
+
+add edges from one graph (H) to another graph (G) in the networkx library using the add_edges_from() method. Here's a detailed explanation:
+
+The `H.edges()` method retrieves all the edges from the graph H as an iterable of edge tuples. Each tuple represents an edge, where the two elements in the tuple are the nodes connected by that edge. For example, if `H` contains edges (1, 2) and (2, 3), `H.edges()` will return an iterable equivalent to [(1, 2), (2, 3)].
+
+The `add_edges_from()` method is then called on the graph G, with the edges from H passed as an argument. This operation adds all the edges from `H` to `G`. If any nodes in the edges do not already exist in `G`, they will be automatically added before the edges are created. This ensures that the graph remains consistent without requiring explicit node additions.
+
+This approach is particularly useful when you want to combine or extend graphs. For example, you might use it to merge the structure of one graph into another or to replicate parts of a graph. After this operation, `G` will contain all the edges from `H`, along with any nodes associated with those edges.
+
+See edges by using `edges()` method
+
+```{pyodide}
+G.edges()
+```
+
+## demolish the graph
+
+These methods provide flexibility for modifying the structure of a graph, whether you need to remove specific elements or reset the entire graph. They are essential for dynamic graph manipulation in applications such as network analysis, simulations, or graph-based algorithms.
+
+1. Graph.remove_node(node): This method removes a single node from the graph. If the node is connected to any edges, those edges are also removed. If the specified node does not exist in the graph, a NetworkXError is raised. This method is useful when you need to delete a specific node and its associated connections.
+2. Graph.remove_nodes_from(nodes): This method removes multiple nodes from the graph in one operation. The nodes parameter is an iterable (e.g., a list or set) containing the nodes to be removed. If any of the specified nodes do not exist in the graph, they are ignored without raising an error. This makes it a safer and more efficient option for batch node removal.
+3. Graph.remove_edge(u, v): This method removes a single edge between nodes u and v. If the edge does not exist, a NetworkXError is raised. This is useful when you need to delete a specific connection between two nodes.
+4. Graph.remove_edges_from(edges): This method removes multiple edges from the graph in one operation. The edges parameter is an iterable of edge tuples (e.g., [(u1, v1), (u2, v2)]). If any of the specified edges do not exist, they are ignored without raising an error. This method is efficient for batch edge removal.
+5. Graph.clear(): This method removes all nodes and edges from the graph, effectively resetting it to an empty state. It is useful when you need to reuse the graph object but want to start fresh without any existing structure.
+
+
+```{pyodide}
+G = nx.Graph()
+G.add_node(H)
+G.remove_node(H)
+```
+
+There are no complaints when adding existing nodes or edges. 
+For example, after removing all nodes and edges,
+
+```{pyodide}
+G.clear()
+```
+
+## Graph manipulation
+
+we add new nodes/edges and NetworkX quietly ignores any that are already present.
+
+```{pyodide}
+G.add_edges_from([(1,2),(1,3)])
+G.add_node(1)
+G.add_edge(1,2)
+G.add_node("spam") # adds node "spam"
+G.add_nodes_from("spam") # adds 4 nodes: 's', 'p', 'a', 'm'
+```
+
+When creating a graph structure (by instantiating one of the graph classes you 
+can specify data in several formats.
+
+```{pyodide}
+H=nx.DiGraph(G)
+H.edges()
+```
+
+```{pyodide}
+edgelist = [(0,1),(1,2),(2,3)]
+H = nx.Graph(edgelist)
+```
+
+## Accessing graph
+
+Three key methods provided by the networkx library for accessing information about the structure of a graph. 
+
+1. `Graph.nodes()`: This method returns a view of all the nodes in the graph. The returned object behaves like a set and allows you to iterate over the nodes or check for the existence of a specific node. For example, calling G.nodes() on a graph G might return something like [1, 2, 3] if the graph contains three nodes labeled 1, 2, and 3. You can also use this method to access node attributes if they exist.
+
+2. `Graph.edges()`: This method returns a view of all the edges in the graph as tuples of connected nodes. For example, calling G.edges() on a graph G might return [(1, 2), (2, 3)] if the graph contains two edges: one connecting nodes 1 and 2, and another connecting nodes 2 and 3. If the graph has edge attributes, you can also access them using this method.
+
+3. `Graph.neighbors(node)`: This method returns an iterator over all the neighbors of a specific node in the graph. Neighbors are nodes that share an edge with the given node. For example, if node 1 is connected to nodes 2 and 3, calling G.neighbors(1) will return an iterator over [2, 3]. This method is particularly useful for exploring the local structure of a graph.
+
+These methods are fundamental for analyzing and interacting with graphs in networkx. They allow you to inspect the nodes, edges, and relationships within a graph, which is essential for tasks such as traversal, visualization, or algorithm implementation.
+
+
+```{pyodide}
+G[1]
+```
+
+```{pyodide}
+G[1][2]
+```
+
+
+## Network attributes
+
+set the attributes of an edge using subscript notation
+
+```{pyodide}
+G.add_edge(1,3)
+G[1][3]['color'] = 'blue'
+G[1][3]
+```
+
+n this line, G is a networkx graph object, and `G[1][3]` accesses the edge between nodes 1 and 3. In networkx, edges can store additional data in the form of attributes, which are stored as key-value pairs in a dictionary associated with the edge.
+
+The expression `G[1][3]['color'] = 'blue'` sets the value of the color attribute for the edge (1, 3) to 'blue'. If the edge does not already exist in the graph, this operation will raise a KeyError. If the edge exists but does not yet have a color attribute, the attribute will be created and assigned the value 'blue'.
+
+This approach is useful for annotating edges with metadata, such as weights, labels, or visual properties (e.g., color for graph visualization). For example, you might use the color attribute to differentiate edges visually when rendering the graph.
+
+After this operation, you can retrieve the value of the color attribute for the edge (1, 3) using `G[1][3]['color']`, which will return 'blue'. This feature is particularly helpful in applications like network analysis or graph-based simulations where edges carry additional contextual information.
+
+
+### Node attributes
+
+Three components of the networkx library related to adding and managing nodes in a graph.
+
+1. Graph.add_node():
+This method is used to add a single node to a graph. You can specify the node by its label, which can be any hashable Python object (e.g., an integer, string, or tuple). If the node already exists in the graph, the method does nothing. Optionally, you can also attach attributes to the node by passing them as keyword arguments. For example:
+
+This adds a node labeled 1 with attributes color and size.
+
+2. Graph.add_nodes_from(): You can attach attributes to all the nodes being added by passing keyword arguments. For example:
+
+This adds nodes 2, 3, and 4 with the attribute color set to 'blue'.
+
+These methods and properties are essential for constructing and managing the nodes in a graph, allowing you to define the structure and annotate nodes with additional data for analysis or visualization.
+
+
+```{pyodide}
+G.add_node(1, time='5pm')
+G.add_nodes_from([3], time='2pm')
+```
+
+The active selection demonstrates how to add nodes to a graph in the networkx library while attaching attributes to those nodes. Here's a detailed explanation:
+
+`G.add_node(1, time='5pm')`: This line adds a single node labeled 1 to the graph G. Additionally, it assigns an attribute time with the value '5pm' to this node. Node attributes in networkx are stored as key-value pairs in a dictionary associated with the node. This allows you to annotate nodes with metadata, such as labels, timestamps, or other relevant information. If the node 1 already exists in the graph, this operation will update its attributes without creating a duplicate.
+
+`G.add_nodes_from([3], time='2pm')`: This line adds multiple nodes to the graph in one operation using the add_nodes_from() method. In this case, the list [3] specifies the nodes to be added (in this example, just node 3). The time='2pm' argument assigns the time attribute with the value '2pm' to all nodes being added. If any of the nodes in the list already exist in the graph, their attributes will be updated with the specified values.
+
+These methods are useful for constructing graphs with annotated nodes, which is common in applications like scheduling, network analysis, or simulations. After these operations, you can access the attributes of the nodes using `G.nodes[1]['time']` (which will return '5pm') or `G.nodes[3]['time']` (which will return '2pm'). This feature allows you to store and retrieve additional information about nodes directly within the graph structure.
+
+Please play around node attributes
+
+```{pyodide}
+G.nodes[1]['room'] = 714
+G.nodes(data=True)
+```
+
+### Edge Attributes
+
+The active selection highlights two methods from the networkx library that are used to add edges to a graph. Here's a detailed explanation of each:
+
+1. `Graph.add_edge()`:
+This method is used to add a single edge between two nodes in a graph. You can also attach attributes to the edge by passing them as keyword arguments. 
+
+
+2. `Graph.add_edges_from()`:
+This method allows you to add multiple edges to a graph in a single operation. You can attach attributes to all the edges being added by passing keyword arguments.
+
+
+```{pyodide}
+G.add_edge(1, 2, weight=4.7 )
+G.add_edges_from([(3,4),(4,5)], color='red')
+G.add_edges_from([(1,2,{'color':'blue'}), (2,3,{'weight':8})])
+G[1][2]['weight'] = 4.7
+```
+
+`G.add_edge(1, 2, weight=4.7)`: This line adds a single edge between nodes 1 and 2 in the graph G. Additionally, it assigns an attribute weight with the value 4.7 to this edge. If either node 1 or 2 does not already exist in the graph, they will be automatically added before the edge is created. This method is useful for adding individual edges with specific attributes.
+
+`G.add_edges_from([(3,4), (4,5)], color='red')`: This line adds multiple edges to the graph in one operation using the add_edges_from() method. The list [(3, 4), (4, 5)] specifies the edges to be added. Additionally, the attribute color is set to 'red' for all the edges being added. If any of the nodes in the edge tuples do not already exist, they will be automatically added to the graph. This method is efficient for batch edge additions with shared attributes.
+
+`G.add_edges_from([(1,2,{'color':'blue'}), (2,3,{'weight':8})])`: This line adds multiple edges to the graph, but unlike the previous example, each edge can have its own set of attributes. The list contains tuples where the first two elements specify the nodes connected by the edge, and the third element is a dictionary of attributes for that edge. For example, the edge (1, 2) is assigned the attribute color='blue', while the edge (2, 3) is assigned the attribute weight=8. This approach provides flexibility for adding edges with unique attributes.
+
+`G[1][2]['weight'] = 4.7`: This line directly modifies the attributes of an existing edge in the graph. Here, the weight attribute of the edge (1, 2) is set to 4.7. This is equivalent to specifying the attribute during edge creation but allows you to update or add attributes after the edge has been added to the graph. If the edge (1, 2) does not exist, this operation will raise a KeyError.
+
+These operations illustrate the flexibility of networkx for adding and annotating edges in a graph. Attributes like weight and color are commonly used in applications such as network analysis, where edges may represent relationships with specific properties (e.g., distances, capacities, or types).
+
+### Weighted edges as edge attributes
+
+Add weighted edges and examine them
+
+```{pyodide}
+FG = nx.Graph()
+FG.add_weighted_edges_from([(1,2,0.125),(1,3,0.75),(2,4,1.2),(3,4,0.375)])
+for n,nbrs in FG.adjacency():
+  for nbr,eattr in nbrs.items():
+    data = eattr['weight']
+    if data<0.5: print('(%d, %d, %.3f)' % (n,nbr,data))
+```
+
+### graph attributes
+
+Assign graph attributes when creating a new graph
+
+```{pyodide}
+G = nx.Graph(day="Friday")
+G.graph
+```
+
+Or you can modify attributes later
+
+```{pyodide}
+G.graph['day']='Monday'
+G.graph
+```
+
+## Directed graphs
+
+DiGraph is a class provided by the networkx library in Python for creating and working with directed graphs. A directed graph, or digraph, is a type of graph where edges have a direction, meaning they go from one node (source) to another node (target). This is in contrast to an undirected graph, where edges have no direction.
+
+The DiGraph class allows you to define and manipulate directed graphs with ease. Nodes in a DiGraph can be any hashable Python object (e.g., integers, strings, or tuples), and edges can have attributes such as weights, labels, or other metadata. For example, you can use DiGraph to model relationships like dependencies, workflows, or networks where the direction of connections matters.
+
+Here’s a simple example:
+
+```{pyodide}
+# Create a directed graph
+G = nx.DiGraph()
+
+# Add nodes and directed edges
+G.add_edge(1, 2)  # Edge from node 1 to node 2
+G.add_edge(2, 3)  # Edge from node 2 to node 3
+
+# Access nodes and edges
+print(list(G.nodes))  # Output: [1, 2, 3]
+print(list(G.edges))  # Output: [(1, 2), (2, 3)]
+```
+
+The active selection lists methods and properties from the networkx library that are specifically designed for analyzing directed graphs (DiGraph). Directed graphs are graphs where edges have a direction, meaning they go from one node (source) to another node (target). These methods help explore the structure and relationships in such graphs. Here's a detailed explanation of each:
+
+2. `DiGraph.in_degree()`: This method calculates the in-degree of nodes, which is the number of edges directed toward a node. For example, if node 3 has incoming edges from nodes 1 and 2, its in-degree is 2. You can use this method to get the in-degree of a specific node or all nodes in the graph.
+4. `DiGraph.out_degree()`: This is a shorthand for accessing the out-degree of nodes in the graph. The out-degree of a node is the number of edges directed from that node to other nodes. It behaves similarly to DiGraph.out_edges() but provides a count instead of the actual edges.
+1. `DiGraph.out_edges()`: This method returns a view of all outgoing edges from nodes in the graph. Each edge is represented as a tuple (u, v), where u is the source node and v is the target node. For example, if there is an edge from node 1 to node 2, it will appear as (1, 2) in the output. You can also filter the edges by specifying a particular node or a list of nodes.
+3. `DiGraph.in_edges()` is part of the networkx library and is used to retrieve the incoming edges of nodes in a directed graph (DiGraph). In a directed graph, edges have a direction, meaning they go from one node (source) to another node (target). The in_edges() method focuses on edges that terminate at a specific node or set of nodes. By default, calling DiGraph.in_edges() without any arguments returns a view of all incoming edges in the graph. Each edge is represented as a tuple (u, v), where u is the source node (the node the edge originates from) and v is the target node (the node the edge points to). For example, if there is an edge from node 1 to node 2, it will appear as (1, 2) in the output.
+1. `DiGraph.predecessors()`: This method returns an iterator over the predecessors of a given node. Predecessors are nodes that have edges pointing to the specified node. For instance, if node 4 has incoming edges from nodes 2 and 3, calling DiGraph.predecessors(4) will return an iterator over [2, 3].
+2. `DiGraph.successors()`: This method returns an iterator over the successors of a given node. Successors are nodes that the specified node points to via outgoing edges. For example, if node 1 has outgoing edges to nodes 2 and 3, calling DiGraph.successors(1) will return an iterator over [2, 3].
+6. `DiGraph.neighbors()` is part of the networkx library and is used to retrieve the neighbors of a specific node in a directed graph (DiGraph). In the context of a directed graph, neighbors are defined as nodes that are directly connected to the given node by an outgoing edge. When you call DiGraph.neighbors(node), it returns an iterator over all the nodes that the specified node points to via outgoing edges. For example, if node 1 has outgoing edges to nodes 2 and 3, calling DiGraph.neighbors(1) will return an iterator over [2, 3].
+
+```{pyodide}
+DG = nx.DiGraph()
+DG.add_weighted_edges_from([(1,2,0.5), (3,1,0.75)])
+DG.out_degree(1,weight='weight')
+```
+
+```{pyodide}
+DG.degree(1,weight='weight')
+```
+
+Please play around with DiGraph methods
+
+```{pyodide}
+DG.successors(1)
+```
+
+```{pyodide}
+DG.neighbors(1)
+```
+
+## Multigraphs
+
+MultiGraph is a class provided by the networkx library in Python for creating and working with undirected multigraphs. A multigraph is a type of graph that allows multiple edges between the same pair of nodes. These edges can have different attributes, such as weights, labels, or other metadata, making MultiGraph particularly useful for modeling relationships where multiple connections between entities need to be represented.
+
+In a MultiGraph, nodes can be any hashable Python object (e.g., integers, strings, or tuples), and edges are stored with unique keys to distinguish between multiple edges connecting the same nodes. This is in contrast to a standard Graph in networkx, which allows only one edge between any two nodes.
+
+Here’s an example of using MultiGraph:
+
+```{pyodide}
+# Create a multigraph
+G = nx.MultiGraph()
+
+# Add nodes and multiple edges between the same nodes
+G.add_edge(1, 2, weight=4.5)  # First edge between nodes 1 and 2
+G.add_edge(1, 2, weight=2.3)  # Second edge between nodes 1 and 2
+
+# Access edges and their attributes
+print(list(G.edges(data=True)))
+# Output: [(1, 2, {'weight': 4.5}), (1, 2, {'weight': 2.3})]
+```
+
+The MultiGraph class is particularly useful in scenarios like transportation networks (e.g., multiple routes between two cities), communication networks (e.g., multiple communication channels between devices), or any domain where multiple relationships between entities need to be captured. It provides flexibility for analyzing and visualizing complex networks with overlapping connections.
+
+The active selection highlights key components of the networkx library related to working with multigraphs and their methods. Here's a detailed explanation of each:
+
+`MultiGraph` is a class in networkx used to create and manipulate undirected multigraphs. A multigraph allows multiple edges between the same pair of nodes. These edges can have different attributes, such as weights or labels, making MultiGraph ideal for modeling scenarios where multiple relationships between entities need to be represented. For example, in a transportation network, multiple routes between two cities can be modeled using a MultiGraph.
+
+`MultiDiGraph` is similar to MultiGraph, but it is used for directed multigraphs. In a MultiDiGraph, edges have a direction, meaning they go from one node (source) to another node (target). Like MultiGraph, it supports multiple edges between the same pair of nodes, each with its own attributes. This is useful for modeling workflows, dependencies, or networks where the direction of connections matters, such as communication networks or flow systems.
+
+Both MultiGraph and MultiDiGraph provide a variety of methods for adding, removing, and analyzing nodes and edges. These methods allow you to manipulate the graph structure and access its properties. For example, you can use methods like add_edge() to add edges, edges() to retrieve all edges, and degree() to calculate the degree of nodes.
+
+```{pyodide}
+MG=nx.MultiGraph()
+MG.add_weighted_edges_from([(1,2,.5), (1,2,.75), (2,3,.5)])
+MG.degree(weight='weight')
+```
+
+```{pyodide}
+GG = nx.Graph()
+for n, nbrs in MG.adjacency():
+  for nbr,edict in nbrs.items():
+    minvalue = min([d['weight'] for d in edict.values()])
+    GG.add_edge(n, nbr, weight=minvalue)
+nx.shortest_path(GG, 1, 3)
+```
+
+## Bipartite graph
+
+In the context of graph theory and libraries like networkx, bipartite refers to a special type of graph where the set of nodes can be divided into two distinct groups (or partitions) such that no two nodes within the same group are connected by an edge. In other words, all edges in a bipartite graph connect nodes from one group to nodes in the other group.
+
+Bipartite graphs are commonly used to model relationships between two different types of entities. For example:
+
+In a recommendation system, one group of nodes might represent users, and the other group might represent items, with edges indicating which items a user has interacted with.
+In a job assignment problem, one group could represent workers and the other group could represent tasks, with edges indicating which workers are eligible for which tasks.
+In the networkx library, bipartite graphs are supported through the networkx.algorithms.bipartite module. This module provides tools for creating, analyzing, and visualizing bipartite graphs. For example:
+
+You can check if a graph is bipartite using nx.is_bipartite(G).
+You can retrieve the two node sets (partitions) using nx.bipartite.sets(G).
+Bipartite graphs are particularly useful in applications like matching problems, recommendation systems, and network flow analysis, where relationships between two distinct types of entities need to be modeled and analyzed.
+
+Bipartite graphs B = (U, V, E) have two node sets U,V and edges in E
+
+```{pyodide}
+import networkx as nx
+from networkx.algorithms import bipartite
+
+B = nx.Graph()
+
+# Add nodes with the node attribute "bipartite"
+B.add_nodes_from([1, 2, 3, 4], bipartite=0)
+B.add_nodes_from(['a', 'b', 'c'], bipartite=1)
+
+# Add edges only between nodes of opposite node sets
+B.add_edges_from([(1, 'a'), (1, 'b'), (2, 'b'), (2, 'c'), (3, 'c'), (4, 'a')])
+```
+
+## Classic graph operations
+
+The active selection lists several graph operations provided by the networkx library, which are useful for manipulating and analyzing graphs. Here's a detailed explanation of each:
+
+```{pyodide}
+import networkx as nx
+
+G1 = nx.Graph()
+G1.add_edges_from([(1, 2), (2, 3), (3, 4)])
+G1.add_node(5)  # Add an isolated node
+
+# Create the second graph G2
+G2 = nx.Graph()
+G2.add_edges_from([(3, 4), (4, 5), (5, 6)])
+G2.add_node(7)  # Add another isolated node
+```
+
+Please try using following operator on G1 and G2
+
+1. `nx.subgraph(G, nbunch)`: This function creates a subgraph of G induced by the nodes in nbunch. The subgraph contains only the specified nodes and the edges between them that exist in the original graph G. This is useful for focusing on a specific portion of a graph.
+
+```{pyodide}
+```
+
+2. `nx.union(G1, G2)`: This operation computes the union of two graphs G1 and G2. The resulting graph contains all nodes and edges from both graphs. If the graphs share common nodes or edges, they are merged in the union.
+
+```{pyodide}
+```
+
+3. `nx.disjoint_union(G1, G2)`: Similar to union, this operation combines two graphs, but it assumes that all nodes in G1 and G2 are distinct. This is useful when combining graphs that represent entirely separate entities.
+
+```{pyodide}
+```
+
+4. `nx.cartesian_product(G1, G2)`: This function computes the Cartesian product of two graphs G1 and G2. The resulting graph has a node for every pair of nodes (u, v) where u is from G1 and v is from G2. Edges are created based on the Cartesian product rules. This is often used in mathematical graph theory.
+
+```{pyodide}
+```
+
+5. `nx.compose(G1, G2)`: This operation combines two graphs by merging their nodes and edges. If the graphs share common nodes, those nodes are identified (treated as the same node) in the resulting graph. This is useful for combining overlapping graphs.
+
+```{pyodide}
+```
+
+6. `nx.complement(G)`: This function computes the complement of a graph G. In the complement graph, nodes that are not connected in G are connected, and nodes that are connected in G are not connected. This is useful for analyzing the "opposite" structure of a graph.
+
+```{pyodide}
+```
+
+7. `nx.create_empty_copy(G)`: This function creates an empty copy of the graph G, preserving its graph class and structure but without any nodes or edges. This is useful for initializing a new graph with the same type as an existing one.
+
+```{pyodide}
+```
+
+8. `nx.convert_to_undirected(G)`: This function returns an undirected representation of the graph G. If G is already undirected, it returns the same graph. This is useful for analyzing directed graphs as undirected ones.
+
+```{pyodide}
+```
+
+9. `nx.convert_to_directed(G)`: This function returns a directed representation of the graph G. If G is already directed, it returns the same graph. This is useful for converting undirected graphs into directed ones for specific analyses.
+
+```{pyodide}
+```
+
+These operations provide powerful tools for graph manipulation, enabling tasks such as extracting subgraphs, combining graphs, or transforming their structure. They are widely used in applications like network analysis, graph theory research, and algorithm development.
+
+## graph generator
+
+### call classic small graphs
+
+The codes demonstrates how to create several well-known graphs using the networkx library. These graphs are predefined in networkx and are often used in graph theory research, teaching, and testing algorithms. Here's a detailed explanation of each:
+
+1. `nx.petersen_graph()`: This function generates the Petersen graph, a famous undirected graph with 10 nodes and 15 edges. It is a small, highly symmetric graph that is often used as a counterexample in graph theory. The Petersen graph is non-planar (it cannot be drawn on a plane without edge crossings) and is widely studied for its interesting properties, such as being 3-regular (each node has exactly 3 neighbors).
+
+```{pyodide}
+petersen=nx.petersen_graph()
+```
+
+2. `nx.tutte_graph()`: This function creates the Tutte graph, a planar, 3-regular graph with 46 nodes and 69 edges. It is a counterexample to the conjecture that every 3-connected, 3-regular bipartite graph is Hamiltonian. The Tutte graph is often used in graph theory to study planarity and Hamiltonian cycles.
+
+```{pyodide}
+tutte=nx.tutte_graph()
+```
+
+3. `nx.sedgewick_maze_graph()`: This function generates the Sedgewick maze graph, a graph that represents a maze structure. It is often used in algorithm testing, particularly for pathfinding algorithms like breadth-first search (BFS) or depth-first search (DFS). The graph is named after Robert Sedgewick, a prominent computer scientist.
+
+```{pyodide}
+maze=nx.sedgewick_maze_graph()
+```
+
+4. `nx.tetrahedral_graph()`: This function creates the tetrahedral graph, which is the graph representation of a tetrahedron (a 3D triangular pyramid). It has 4 nodes and 6 edges, with each node connected to every other node. This graph is a complete graph (denoted as ( K_4 )) and is often used in studies of symmetry and graph embeddings.
+
+```{pyodide}
+tet=nx.tetrahedral_graph()
+```
+
+Summary:
+These predefined graphs in networkx provide a convenient way to work with well-known graph structures. They are useful for testing algorithms, exploring graph properties, and teaching concepts in graph theory. By using these functions, you can quickly generate complex graph structures without manually defining nodes and edges.
+
+
+### generator for a classic graph
+
+The codes demonstrates how to create several types of well-known graphs using the networkx library. These graphs are commonly used in graph theory, algorithm testing, and teaching. Here's a detailed explanation of each:
+
+1. `nx.complete_graph(5)`: This function generates a complete graph with 5 nodes, denoted as ( K_5 ). In a complete graph, every pair of nodes is connected by an edge. For ( K_5 ), this means there are 5 nodes and ( \binom{5}{2} = 10 ) edges. Complete graphs are often used in graph theory to study properties like connectivity and graph coloring.
+
+```{pyodide}
+K_5=nx.complete_graph(5)
+```
+
+2. `nx.complete_bipartite_graph(3, 5)`: This function creates a complete bipartite graph with two sets of nodes: one set containing 3 nodes and the other containing 5 nodes. In a complete bipartite graph, every node in one set is connected to every node in the other set, but there are no edges within the same set. This graph is denoted as ( K_{3,5} ) and is often used in applications like matching problems and network flow analysis.
+
+```{pyodide}
+K_3_5=nx.complete_bipartite_graph(3,5)
+```
+`
+3. `nx.barbell_graph(10, 10): This function generates a barbell graph, which consists of two complete graphs (each with 10 nodes) connected by a path. The two complete graphs form the "bells," and the path connecting them is the "handle." Barbell graphs are useful for studying properties like graph connectivity and flow.
+
+```{pyodide}
+barbell=nx.barbell_graph(10,10)
+```
+
+4. `nx.lollipop_graph(10, 20)`: This function creates a lollipop graph, which is a combination of a complete graph and a path graph. In this case, the graph consists of a complete graph with 10 nodes connected to a path graph with 20 nodes. Lollipop graphs are often used in graph traversal problems and as examples in graph theory.
+
+```{pyodide}
+lollipop=nx.lollipop_graph(10,20)
+```
+
+Summary:
+These graph generation functions in networkx provide a quick and efficient way to create structured graphs for analysis, testing, and visualization. Each graph type has unique properties and applications, making them valuable tools for exploring different aspects of graph theory and algorithms.
+
+
+### stochastic graph generator
+
+These codes demonstrates how to generate various types of random graphs using the networkx library. These graph generation functions are commonly used in network science, graph theory, and simulations to model different types of real-world networks. Here's a detailed explanation of each:
+
+1. `nx.erdos_renyi_graph(100, 0.15)`: This function generates an Erdős-Rényi random graph using the ( G(n, p) ) model. In this model, a graph is created with n=100 nodes, and each possible edge between pairs of nodes is included with a probability of p=0.15. This type of graph is often used to study random network properties, such as connectivity and clustering, and serves as a baseline for comparing other graph models.
+
+```{pyodide}
+er=nx.erdos_renyi_graph(100,0.15)
+```
+
+2. `nx.watts_strogatz_graph(30, 3, 0.1)`: This function creates a Watts-Strogatz small-world graph, which models networks with small-world properties, such as short average path lengths and high clustering. The graph starts with 30 nodes arranged in a ring, where each node is connected to its 3 nearest neighbors. Then, each edge is rewired with a probability of 0.1. This model is commonly used to study social networks, biological networks, and other systems with small-world characteristics.
+
+```{pyodide}
+ws=nx.watts_strogatz_graph(30,3,0.1)
+```
+
+3. `nx.barabasi_albert_graph(100, 5)`: This function generates a Barabási-Albert preferential attachment graph, which models scale-free networks. The graph starts with a small number of nodes, and new nodes are added one at a time, each forming 5 edges to existing nodes. The probability of connecting to an existing node is proportional to its degree, meaning nodes with more connections are more likely to attract new edges. This model is widely used to study networks like the internet, citation networks, and social networks, where some nodes (hubs) have significantly more connections than others.
+
+```{pyodide}
+ba=nx.barabasi_albert_graph(100,5)
+```
+
+4. `nx.random_lobster(100, 0.9, 0.9)`: This function generates a random lobster graph, which is a type of tree-like graph. It starts with a random backbone (a path graph) and adds branches (nodes connected to the backbone) and sub-branches (nodes connected to the branches) with probabilities 0.9 and 0.9, respectively. Lobster graphs are often used to model hierarchical or tree-like structures, such as organizational charts or certain biological networks.
+
+```{pyodide}
+red=nx.random_lobster(100,0.9,0.9)
+```
+
+Summary:
+These graph generation functions allow you to create networks with distinct structural properties, making them useful for modeling and analyzing different types of real-world systems. Each graph type has unique characteristics, such as randomness, small-world behavior, scale-free properties, or hierarchical structure, which can be leveraged depending on the application or research question.
+
+
+## Graph IO
+
+These various formats commonly used for storing and exchanging graph data. These formats are supported by libraries like networkx for importing and exporting graphs, making it easier to work with graph data across different tools and systems. Here's a detailed explanation of each:
+
+1. Edge Lists: An edge list is a simple text-based format where each line represents an edge in the graph. Each line typically contains two node identifiers (and optionally edge attributes), indicating a connection between the nodes. Edge lists are compact and easy to read, making them a popular choice for representing graphs in plain text.
+2. Adjacency Lists: An adjacency list represents a graph by listing each node and its neighbors. Each line corresponds to a node, followed by a list of nodes it is connected to. This format is efficient for sparse graphs and is commonly used in graph algorithms.
+3. GML (Graph Modeling Language): GML is a flexible, plain-text format for representing graphs. It supports nodes, edges, and their attributes, making it suitable for storing complex graph structures. GML is widely used in graph visualization tools and research.
+4. GraphML: GraphML is an XML-based format for representing graphs. It supports hierarchical graphs, attributes for nodes and edges, and metadata. GraphML is highly interoperable and is often used in graph analysis and visualization tools.
+5. Pickle: Pickle is a Python-specific binary format for serializing and deserializing Python objects, including graphs. It is efficient for saving and loading graphs in Python but is not portable across programming languages.
+6. LEDA: LEDA (Library of Efficient Data types and Algorithms) is a format used in the LEDA software for graph algorithms. It is designed for efficient storage and manipulation of graphs and supports attributes for nodes and edges.
+
+```{pyodide}
+nx.write_gml(red,"path.to.file")
+mygraph=nx.read_gml("path.to.file")
+```
+
+Details on graph formats: /reference/readwrite
+Details on graph generator functions: /reference/generators
+
+## Analyzing graphs
+
+The structure of G can be analyzed using various graph-theoretic functions such as:
+
+```{pyodide}
+G=nx.Graph()
+G.add_edges_from([(1,2),(1,3)])
+G.add_node("spam") # adds node "spam"
+nx.connected_components(G)
+```
+
+```{pyodide}
+sorted([y for x, y in nx.degree(G)])
+```
+
+```{pyodide}
+nx.clustering(G)
+```
+
+Functions that return node properties return dictionaries keyed by node label.
+
+```{pyodide}
+nx.degree(G)
+```
+
+For values of specific nodes, you can provide a single 
+node or an nbunch of nodes as argument. If a single node 
+is specified, then a single value is returned. If an 
+nbunch is specified, then the function will return a dictionary.
+
+```{pyodide}
+nx.degree(G,1)
+```
+
+```{pyodide}
+G.degree(1)
+```
+
+```{pyodide}
+G.degree([1,2])
+```
+
+```{pyodide}
+sorted([y for x, y in G.degree([1,2])])
+```
+
+```{pyodide}
+sorted([y for x, y in G.degree()])
+```
+
+GitHub Copilot
+Here’s an example of analyzing graphs using networkx. This example demonstrates how to compute various graph properties and metrics:
+
+```{pyodide}
+import networkx as nx
+
+# Create a graph
+G = nx.Graph()
+```
+
+```{pyodide}
+# Add nodes and edges
+G.add_edges_from([(1, 2), (1, 3), (2, 4), (3, 4), (4, 5)])
+G.add_node("spam")  # Add an isolated node
+```
+
+### Analyze connected components
+
+```{pyodide}
+connected_components = list(nx.connected_components(G))
+print("Connected Components:", connected_components)
+```
+
+### Degree of nodes
+```{pyodide}
+degree = dict(nx.degree(G))
+print("Node Degrees:", degree)
+```
+
+### Clustering coefficient
+
+```{pyodide}
+clustering = nx.clustering(G)
+print("Clustering Coefficient:", clustering)
+```
+
+### Shortest path between two nodes
+
+```{pyodide}
+shortest_path = nx.shortest_path(G, source=1, target=5)
+print("Shortest Path from 1 to 5:", shortest_path)
+```
+
+### Average shortest path length (only for connected graphs)
+
+```{pyodide}
+if nx.is_connected(G):
+    avg_shortest_path_length = nx.average_shortest_path_length(G)
+    print("Average Shortest Path Length:", avg_shortest_path_length)
+else:
+    print("Graph is not connected, average shortest path length cannot be computed.")
+```
+
+### Diameter of the graph (only for connected graphs)
+
+```{pyodide}
+if nx.is_connected(G):
+    diameter = nx.diameter(G)
+    print("Diameter of the Graph:", diameter)
+else:
+    print("Graph is not connected, diameter cannot be computed.")
+```
+
+### Degree centrality
+
+```{pyodide}
+degree_centrality = nx.degree_centrality(G)
+print("Degree Centrality:", degree_centrality)
+```
+
+### Betweenness centrality
+
+```{pyodide}
+betweenness_centrality = nx.betweenness_centrality(G)
+print("Betweenness Centrality:", betweenness_centrality)
+```
+
+### Closeness centrality
+
+```{pyodide}
+closeness_centrality = nx.closeness_centrality(G)
+print("Closeness Centrality:", closeness_centrality)
+```
+
+Explanation:
+- Connected Components: Identifies all connected subgraphs in the graph.
+- Node Degrees: Computes the degree (number of edges) for each node.
+- Clustering Coefficient: Measures the tendency of nodes to form triangles.
+- Shortest Path: Finds the shortest path between two nodes.
+- Average Shortest Path Length: Computes the average shortest path length (only for connected graphs).
+- Diameter: Finds the longest shortest path in the graph (only for connected graphs).
+- Degree Centrality: Measures the importance of nodes based on their degree.
+- Betweenness Centrality: Measures the importance of nodes based on the number of shortest paths passing through them.
+- Closeness Centrality: Measures how close a node is to all other nodes in the graph.
+
+This example covers a variety of graph analysis techniques that are commonly used in network analysis.
+
+Details on graph algorithms supported: /reference/algorithms
+
+## Drawing graphs
+
+basic drawing with Matplotlib, Graphviz
+See /reference/drawing for details.
+
+```{pyodide}
+import matplotlib.pyplot as plt
+```
+
+Please create the graph `G` using various graph generators for visualization 
+
+```{pyodide}
+G = nx.....
+```
+
+
+To test if the import of networkx.drawing was successful draw G using one of
+
+```{pyodide}
+nx.draw(G)
+```
+
+```{pyodide}
+nx.draw_random(G)
+```
+
+```{pyodide}
+nx.draw_circular(G)
+```
+
+```{pyodide}
+nx.draw_spectral(G)
+```
+
+interactive display
+
+```{pyodide}
+plt.show()
+```
+
+Save drawings to a file
+
+```{pyodide}
+nx.draw(G)
+```
+
+```{pyodide}
+plt.savefig("path.png")
+```
+
+If Graphviz and PyGraphviz, or pydot
+
+```{pyodide}
+nx.drawing.nx_pydot.write_dot(G,'file.dot')
+```
+
+Details on drawing graphs: /reference/drawing
